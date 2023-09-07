@@ -1,7 +1,7 @@
 import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
 import { ImageList } from './ImageGallery.styled';
 
-function ImageGallery({ items }) {
+function ImageGallery({ items, handleZoom }) {
   return (
     <ImageList>
       {items.map(item => (
@@ -10,6 +10,7 @@ function ImageGallery({ items }) {
           smallImage={item.webformatURL}
           largeImage={item.largeImageURL}
           tag={item.tag}
+          onClick={handleZoom}
         />
       ))}
     </ImageList>

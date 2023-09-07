@@ -1,10 +1,12 @@
-function Modal({ largeImg, tag }) {
+import { ModalContainer, Overlay } from './Modal.styled';
+
+function Modal({ largeImg, tag, handleCloseModal }) {
   return (
-    <div>
-      <div>
+    <Overlay onClick={handleCloseModal}>
+      <ModalContainer>
         <img src={largeImg} alt={tag} />
-      </div>
-    </div>
+      </ModalContainer>
+    </Overlay>
   );
 }
 

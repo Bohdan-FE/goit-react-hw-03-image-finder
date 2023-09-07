@@ -1,6 +1,6 @@
-function ImageGalleryItem({ smallImage, tag }) {
+function ImageGalleryItem({ smallImage, tag, onClick }) {
   return (
-    <li>
+    <li onClick={() => onClick(smallImage, tag)}>
       <img src={smallImage} alt={tag} loading="lazy" />
     </li>
   );
