@@ -12,6 +12,7 @@ export class App extends Component {
     value: '',
     page: 1,
     loader: false,
+    showBtn: false,
     modal: {
       isActive: false,
       largeImg: '',
@@ -20,26 +21,17 @@ export class App extends Component {
   };
 
   async componentDidUpdate(prevProps, prevState) {
-    if (prevState.value !== this.state.value) {
-      this.setState({ loader: true });
-      try {
-        const items = await fetchItems(this.state.value, 1);
-        this.setState({ items: items.hits, page: 1 });
-      } catch (error) {
-        console.log(error);
-      } finally {
-        this.setState({ loader: false });
-      }
-    }
-    if (prevState.page < this.state.page) {
-      window.scrollBy({
-        top: 1000,
-        behavior: 'smooth',
-      });
+    if (
+      prevState.value !== this.state.value ||
+      this.state.page !== prevState.page
+    ) {
       this.setState({ loader: true });
       try {
         const items = await fetchItems(this.state.value, this.state.page);
-        this.setState({ items: [...prevState.items, ...items.hits] });
+        this.setState({
+          items: [...prevState.items, ...items.hits],
+          showBtn: this.state.page < Math.ceil(items.totalHits / 20),
+        });
       } catch (error) {
         console.log(error);
       } finally {
@@ -67,15 +59,13 @@ export class App extends Component {
   };
 
   handleCloseModal = e => {
-    if (e.key === 'Escape' || e.currentTarget === e.target) {
-      this.setState({
-        modal: {
-          isActive: false,
-          largeImg: '',
-          tag: '',
-        },
-      });
-    }
+    this.setState({
+      modal: {
+        isActive: false,
+        largeImg: '',
+        tag: '',
+      },
+    });
   };
 
   render() {
@@ -84,7 +74,7 @@ export class App extends Component {
         <SearchBar onSubmit={this.handleSubmit} />
         <ImageGallery items={this.state.items} handleZoom={this.handleZoom} />
         {this.state.loader && <Loader />}
-        {this.state.items.length >= 20 && <Button onClick={this.handleClick} />}
+        {this.state.showBtn && <Button onClick={this.handleClick} />}
         {this.state.modal.isActive && (
           <Modal
             largeImg={this.state.modal.largeImg}

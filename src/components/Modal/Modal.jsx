@@ -3,20 +3,24 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 export default class Modal extends Component {
-  state = {};
-
   componentDidMount() {
-    window.addEventListener('keydown', this.props.handleCloseModal);
+    window.addEventListener('keydown', this.closeModal);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('keydown', this.props.handleCloseModal);
+    window.removeEventListener('keydown', this.closeModal);
   }
 
+  closeModal = e => {
+    if (e.key === 'Escape' || e.currentTarget === e.target) {
+      this.props.handleCloseModal();
+    }
+  };
+
   render() {
-    const { largeImg, tag, handleCloseModal } = this.props;
+    const { largeImg, tag } = this.props;
     return (
-      <Overlay onClick={handleCloseModal}>
+      <Overlay onClick={this.closeModal}>
         <ModalContainer>
           <img src={largeImg} alt={tag} />
         </ModalContainer>
@@ -25,7 +29,7 @@ export default class Modal extends Component {
   }
 }
 
-Modal.propTypes = {
+Modal.propType = {
   largeImg: PropTypes.string,
   tag: PropTypes.string,
   handleCloseModal: PropTypes.func,
