@@ -28,9 +28,11 @@ export class App extends Component {
       this.setState({ loader: true });
       try {
         const items = await fetchItems(this.state.value, this.state.page);
-        this.setState({
-          items: [...prevState.items, ...items.hits],
-          showBtn: this.state.page < Math.ceil(items.totalHits / 20),
+        this.setState(prevState => {
+          return {
+            items: [...prevState.items, ...items.hits],
+            showBtn: this.state.page < Math.ceil(items.totalHits / 20),
+          };
         });
       } catch (error) {
         console.log(error);
