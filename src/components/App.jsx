@@ -41,7 +41,7 @@ export class App extends Component {
   }
 
   handleSubmit = value => {
-    this.setState({ value });
+    this.setState({ value, page: 1, items: [] });
   };
 
   handleClick = () => {
