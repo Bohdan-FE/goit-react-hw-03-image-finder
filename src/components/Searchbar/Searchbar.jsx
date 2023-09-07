@@ -1,5 +1,7 @@
 import { Component } from 'react';
 import { Header } from './Searchbar.styled';
+import PropTypes from 'prop-types';
+
 class SearchBar extends Component {
   state = {
     input: '',
@@ -28,6 +30,7 @@ class SearchBar extends Component {
             autoFocus
             placeholder="Search images and photos"
             onChange={this.handleChange}
+            value={this.state.input}
           />
         </form>
       </Header>
@@ -36,3 +39,7 @@ class SearchBar extends Component {
 }
 
 export default SearchBar;
+
+SearchBar.propTypes = {
+  onSubmit: PropTypes.func,
+};

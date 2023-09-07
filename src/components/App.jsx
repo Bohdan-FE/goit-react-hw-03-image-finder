@@ -21,19 +21,23 @@ export class App extends Component {
 
   async componentDidUpdate(prevProps, prevState) {
     if (prevState.value !== this.state.value) {
+      this.setState({ loader: true });
       try {
-        this.setState({ loader: true });
-        const items = await fetchItems(this.state.value, this.state.page);
-        this.setState({ items: items.hits });
+        const items = await fetchItems(this.state.value, 1);
+        this.setState({ items: items.hits, page: 1 });
       } catch (error) {
         console.log(error);
       } finally {
         this.setState({ loader: false });
       }
     }
-    if (prevState.page !== this.state.page) {
+    if (prevState.page < this.state.page) {
+      window.scrollBy({
+        top: 1000,
+        behavior: 'smooth',
+      });
+      this.setState({ loader: true });
       try {
-        this.setState({ loader: true });
         const items = await fetchItems(this.state.value, this.state.page);
         this.setState({ items: [...prevState.items, ...items.hits] });
       } catch (error) {
@@ -45,20 +49,12 @@ export class App extends Component {
   }
 
   handleSubmit = value => {
-    this.setState({ value, loader: true });
+    this.setState({ value });
   };
 
   handleClick = () => {
-    this.scrollDown();
     this.setState(prevState => ({ page: prevState.page + 1 }));
   };
-
-  scrollDown() {
-    window.scrollBy({
-      top: 1000,
-      behavior: 'smooth',
-    });
-  }
 
   handleZoom = (url, tag) => {
     this.setState({
@@ -70,32 +66,16 @@ export class App extends Component {
     });
   };
 
-  componentDidMount() {
-    document.addEventListener('keydown', this.handleCloseModal);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.handleCloseModal);
-  }
-
   handleCloseModal = e => {
-    // if (e.key === 'Escape') {
-    //   this.setState({
-    //     modal: {
-    //       isActive: false,
-    //       largeImg: '',
-    //       tag: '',
-    //     },
-    //   });
-    // }
-    console.log(e.currentTarget);
-    this.setState({
-      modal: {
-        isActive: false,
-        largeImg: '',
-        tag: '',
-      },
-    });
+    if (e.key === 'Escape' || e.currentTarget === e.target) {
+      this.setState({
+        modal: {
+          isActive: false,
+          largeImg: '',
+          tag: '',
+        },
+      });
+    }
   };
 
   render() {

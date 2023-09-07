@@ -1,5 +1,6 @@
 import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
 import { ImageList } from './ImageGallery.styled';
+import PropTypes from 'prop-types';
 
 function ImageGallery({ items, handleZoom }) {
   return (
@@ -18,3 +19,15 @@ function ImageGallery({ items, handleZoom }) {
 }
 
 export default ImageGallery;
+
+ImageGallery.propTypes = {
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      key: PropTypes.string,
+      smallImage: PropTypes.string,
+      largeImage: PropTypes.string,
+      tag: PropTypes.string,
+    })
+  ),
+  handleZoom: PropTypes.func,
+};
